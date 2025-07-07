@@ -1,0 +1,14 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Force text for common project files
+*.hx       text
+*.java     text
+*.json     text
+*.xml      text
+*.md       text
+*.sh       text eol=lf
+*.mk       text eol=lf
+*.gradle   text
+*.cmake    text
+CMakeLists.txt text
