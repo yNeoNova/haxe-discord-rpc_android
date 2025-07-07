@@ -1,0 +1,62 @@
+name: Build Discord RPC .so Libraries
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'jni/**'
+      - 'include/**'
+      - 'lists/**'
+      - 'ndk/**'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      NDK_VERSION: 25.1.8937393
+      ABI_LIST: "armeabi-v7a arm64-v8a"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK & NDK
+        uses: android-actions/setup-android@v2
+
+      - name: Accept SDK licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Install NDK
+        run: sdkmanager "ndk;$NDK_VERSION"
+
+      - name: Configure local.properties
+        run: |
+          echo "ndk.dir=$ANDROID_SDK_ROOT/ndk/$NDK_VERSION" > ndk/local.properties
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> ndk/local.properties
+
+      - name: Build Native .so files
+        run: |
+          cd ndk
+          ./gradlew clean assembleDebug
+
+      - name: Force move .so files to lib/android folders
+        run: |
+          mkdir -p lib/android/armeabi-v7a
+          mkdir -p lib/android/arm64-v8a
+
+          find ndk/build/intermediates/cmake/debug/obj/armeabi-v7a -name "*.so" -exec cp {} lib/android/armeabi-v7a/ \;
+          find ndk/build/intermediates/cmake/debug/obj/arm64-v8a -name "*.so" -exec cp {} lib/android/arm64-v8a/ \;
+
+      - name: Upload artifacts (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: discord_rpc_so_files
+          path: lib/android/
