@@ -1,0 +1,21 @@
+# Build artifacts
+build/
+bin/
+out/
+dist/
+
+# Gradle build folders
+.gradle/
+**/build/
+
+# Native build cache
+obj/
+*.o
+*.d
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# hmm
+export/
