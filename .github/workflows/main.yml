@@ -45,7 +45,7 @@ jobs:
       - name: Build Native .so files
         run: |
           cd ndk
-          gradlew clean assembleDebug
+          gradle clean assembleDebug
 
       - name: Force move .so files to lib/android folders
         run: |
