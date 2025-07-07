@@ -1,3 +1,8 @@
-appID=1389334268311765022
+appID=your_application_id_here
 largeImageKey=largeImage
 smallImageKey=smallimage
+UsesmallImageText=true
+UselargeImageText=true
+smallImageText=StringOutput
+largeImageText=StringOutput
+Usestimestamp=true
