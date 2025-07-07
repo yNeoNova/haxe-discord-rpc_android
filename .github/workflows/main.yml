@@ -56,7 +56,7 @@ jobs:
           find ndk/build/intermediates/cmake/debug/obj/arm64-v8a -name "*.so" -exec cp {} lib/android/arm64-v8a/ \;
 
       - name: Upload artifacts (optional)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: discord_rpc_so_files
           path: lib/android/
