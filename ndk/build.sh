@@ -1,35 +1,24 @@
 #!/bin/bash
-
 set -e
 
-# Paths
-OUT_DIR_ARMEABI=lib/android/armeabi-v7a
-OUT_DIR_ARM64=lib/android/arm64-v8a
+NDK_PROJECT_PATH=$(pwd)
+APP_BUILD_SCRIPT="$NDK_PROJECT_PATH/ndk/Android.mk"
+APP_PLATFORM=android-21
+APP_ABI="armeabi-v7a:arm64-v8a"
 
-# Ensure output directories exist
-mkdir -p $OUT_DIR_ARMEABI
-mkdir -p $OUT_DIR_ARM64
+echo "[NDK-BUILD] Building .so for armeabi-v7a and arm64-v8a..."
 
-# Build for armeabi-v7a
-echo "[NDK-BUILD] Building .so for armeabi-v7a..."
-ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk APP_PLATFORM=android-21 APP_ABI=armeabi-v7a
+$ANDROID_NDK_HOME/ndk-build \
+  NDK_PROJECT_PATH="$NDK_PROJECT_PATH" \
+  APP_BUILD_SCRIPT="$APP_BUILD_SCRIPT" \
+  APP_PLATFORM=$APP_PLATFORM \
+  APP_ABI="$APP_ABI" \
+  NDK_APPLICATION_MK="$NDK_PROJECT_PATH/ndk/Application.mk" \
+  -C ndk
 
-# Move .so
-echo "[MOVE] Moving libdiscord_rpc.so to $OUT_DIR_ARMEABI/"
-find ./libs/armeabi-v7a/ -name "*.so" -exec mv {} $OUT_DIR_ARMEABI/ \;
+echo "[NDK-BUILD] Moving .so files to lib/android/..."
+mkdir -p lib/android/armeabi-v7a lib/android/arm64-v8a
+cp -v ndk/obj/local/armeabi-v7a/*.so lib/android/armeabi-v7a/
+cp -v ndk/obj/local/arm64-v8a/*.so lib/android/arm64-v8a/
 
-# Clean intermediate
-rm -rf libs/armeabi-v7a
-
-# Build for arm64-v8a
-echo "[NDK-BUILD] Building .so for arm64-v8a..."
-ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk APP_PLATFORM=android-21 APP_ABI=arm64-v8a
-
-# Move .so
-echo "[MOVE] Moving libdiscord_rpc.so to $OUT_DIR_ARM64/"
-find ./libs/arm64-v8a/ -name "*.so" -exec mv {} $OUT_DIR_ARM64/ \;
-
-# Clean intermediate
-rm -rf libs/arm64-v8a
-
-echo "[DONE] Native .so files moved to lib/android/[arch]/"
+echo "[NDK-BUILD] Done."
