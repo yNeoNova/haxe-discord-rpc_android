@@ -11,13 +11,17 @@ $ANDROID_NDK_HOME/ndk-build \
   APP_ABI="armeabi-v7a arm64-v8a" \
   -C ndk
   
+echo "Listing ndk/obj/local folder:"
+find ndk/obj/local -name "*.so"
+
 mkdir -p lib/android/armeabi-v7a
 mkdir -p lib/android/arm64-v8a
 
-mv ndk/libs/armeabi-v7a/*.so lib/android/armeabi-v7a/
-mv ndk/libs/arm64-v8a/*.so lib/android/arm64-v8a/
+cp ndk/obj/local/armeabi-v7a/*.so lib/android/armeabi-v7a/
+cp ndk/obj/local/arm64-v8a/*.so lib/android/arm64-v8a/
 
-echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀
+echo "Done, also, u just got sussy momented
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀
