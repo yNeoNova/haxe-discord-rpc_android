@@ -4,7 +4,7 @@ set -e
 NDK_PROJECT_PATH=$(pwd)
 APP_BUILD_SCRIPT="$NDK_PROJECT_PATH/ndk/Android.mk"
 APP_PLATFORM=android-21
-APP_ABI="armeabi-v7a:arm64-v8a"
+APP_ABI="armeabi-v7a arm64-v8a"
 
 echo "[NDK-BUILD] Building .so for armeabi-v7a and arm64-v8a..."
 
