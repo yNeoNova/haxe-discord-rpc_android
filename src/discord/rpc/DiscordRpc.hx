@@ -7,7 +7,6 @@ import lime.system.JNI;
 #end
 
 class DiscordRpc {
-    // Presence data
     public static var clientID:String = "";
     public static var details:String = "";
     public static var state:String = "";
@@ -26,18 +25,11 @@ class DiscordRpc {
     public static var button2Label:String = "";
     public static var button2URL:String = "";
 
-    /**
-     * Loads Discord RPC config from a text file.
-     * Expected keys:
-     *  appID, largeImageKey, smallImageKey,
-     *  UsesmallImageText, UselargeImageText,
-     *  smallImageText, largeImageText,
-     *  Usestimestamp
-     */
-    public static function loadConfig(path:String = "assets/data/discord_rpc_config.txt"):Void {
+    public static function loadConfig(path:String = "assets/data/discord_data.txt"):Void {
         var text = Assets.getText(path);
         var lines = text.split('\n');
         for (line in lines) {
+            line = line.split('--')[0].trim();
             var parts = line.split('=');
             if (parts.length == 2) {
                 var key = parts[0].trim();
@@ -59,14 +51,11 @@ class DiscordRpc {
                         largeImageText = value;
                     case "Usestimestamp":
                         useTimestamp = (value.toLowerCase() == "true");
-                    default:
-                        // Ignore unknown keys
                 }
             }
         }
     }
 
-    // Setter methods for text and buttons (set these directly in code)
     public static function setDetails(d:String):Void details = d;
     public static function setState(s:String):Void state = s;
 
@@ -80,17 +69,9 @@ class DiscordRpc {
         button2URL = url;
     }
 
-    /**
-     * Call this after setting all values to update Discord Rich Presence.
-     */
     public static function rebuild():Void {
         #if android
-        trace("[DiscordRpc] Rebuilding presence...");
-
-        if (clientID == "") {
-            trace("[DiscordRpc] Warning: clientID (appID) is empty!");
-            return;
-        }
+        if (clientID == "") return;
 
         JNI.call("discord.rpc.DiscordRpc", "init", ["java.lang.String"], clientID);
 
@@ -121,8 +102,6 @@ class DiscordRpc {
             JNI.call("discord.rpc.DiscordRpc", "setButton2", ["java.lang.String", "java.lang.String"], button2Label, button2URL);
 
         JNI.call("discord.rpc.DiscordRpc", "update", []);
-        #else
-        trace("[DiscordRpc] Stub rebuild called (not Android).");
         #end
     }
 }
