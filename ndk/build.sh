@@ -10,3 +10,10 @@ APP_ABI=arm64-v8a ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=ndk/Android.mk A
 
 echo "[DEBUG] Listing all .so files in project..."
 find . -name "*.so"
+
+echo "[COPY] Copying .so files to lib/android folders..."
+
+for arch in armeabi-v7a arm64-v8a x86 x86_64; do
+    mkdir -p lib/android/$arch
+    cp -v ndk/libs/$arch/*.so lib/android/$arch/ || echo "[WARN] No .so files found for $arch"
+done
