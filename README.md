@@ -12,7 +12,7 @@ In your `hmm.json` paste this content:
       "name": "haxe-discord-rpc_android",
       "type": "git",
       "dir": null,
-      "ref": "master",
+      "ref": "main",
       "url": "https://github.com/yNeoNova/haxe-discord-rpc_android"
     }
   ]
