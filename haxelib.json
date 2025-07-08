@@ -1,0 +1,12 @@
+{
+  "name": "haxe-discord-rpc_android",
+  "url": "https://github.com/yNeoNova/haxe-discord-rpc_android",
+  "license": "MIT",
+  "tags": ["discord", "rpc", "android", "native", "jni", "presence"],
+  "description": "Android-compatible Discord Rich Presence integration using JNI, C++, and Java for native Haxe projects.",
+  "version": "0.0.1",
+  "releasenote": "Initial native-compatible build with .so libraries for multiple ABIs (armeabi-v7a, arm64-v8a, x86, x86_64)",
+  "classPath": "src",
+  "dependencies": {},
+  "contributors": ["Leo"]
+}
