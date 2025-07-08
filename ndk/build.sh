@@ -10,9 +10,12 @@ $ANDROID_NDK_HOME/ndk-build \
   APP_PLATFORM=android-21 \
   APP_ABI="armeabi-v7a arm64-v8a" \
   -C ndk
+  
+# mkdir -p lib/android/armeabi-v7a
+# mkdir -p lib/android/arm64-v8a
 
-mkdir -p lib/android/armeabi-v7a lib/android/arm64-v8a
-cp -v ndk/obj/local/armeabi-v7a/*.so lib/android/armeabi-v7a/
-cp -v ndk/obj/local/arm64-v8a/*.so lib/android/arm64-v8a/
+# Move the compiled .so files from ndk/libs to lib/android folders
+mv *.so lib/android/armeabi-v7a/
+mv *.so lib/android/arm64-v8a/
 
-echo "Build complete."
+echo "Build and move complete."
