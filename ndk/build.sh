@@ -15,5 +15,5 @@ echo "[COPY] Copying .so files to lib/android folders..."
 
 for arch in armeabi-v7a arm64-v8a x86 x86_64; do
     mkdir -p lib/android/$arch
-    cp -v ndk/libs/$arch/*.so lib/android/$arch/ || echo "[WARN] No .so files found for $arch"
+    cp -v libs/$arch/*.so lib/android/$arch/ || echo "[WARN] No .so files found for $arch"
 done
