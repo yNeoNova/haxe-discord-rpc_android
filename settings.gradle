@@ -1,5 +1,0 @@
-rootProject.name = 'haxe-discord-rpc_android'
-
-// Include the native ndk module for .so compilation
-include ':ndk'
-project(':ndk').projectDir = file('ndk')
