@@ -63,6 +63,7 @@ class Main {
 # Notes:
 As said earlier:
 > Library only for Android
+
 > Supported ABIs: armeabi-v7a, arm64-v8a, x86 and x86_64
 
 # License
