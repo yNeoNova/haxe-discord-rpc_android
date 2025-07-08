@@ -3,6 +3,7 @@ An Haxelib Android library written in [C++](https://isocpp.org/), [Java](https:/
 
 # Installation
 In your `hmm.json` paste this content:
+
 `used haxe modular manager` [v3.1.0](https://lib.haxe.org/p/hmm/)
 ```json
 {
