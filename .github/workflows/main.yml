@@ -1,62 +1,45 @@
-name: Build Discord RPC .so Libraries
+name: Build Native Discord RPC (.so)
 
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - 'jni/**'
-      - 'include/**'
-      - 'lists/**'
-      - 'ndk/**'
-      - '.github/workflows/**'
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-native-libs:
+    name: Build .so files for Android
     runs-on: ubuntu-latest
 
-    env:
-      NDK_VERSION: 25.1.8937393
-      ABI_LIST: "armeabi-v7a arm64-v8a"
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Set up NDK
+        uses: nttld/setup-ndk@v1
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          ndk-version: r25c
 
-      - name: Set up Android SDK & NDK
-        uses: android-actions/setup-android@v2
+      - name: Install required tools
+        run: sudo apt-get update && sudo apt-get install -y zip make
 
-      - name: Accept SDK licenses
-        run: yes | sdkmanager --licenses
+      - name: Make build.sh executable
+        run: chmod +x ndk/build.sh
 
-      - name: Install NDK
-        run: sdkmanager "ndk;$NDK_VERSION"
+      - name: Run native build script
+        run: ./ndk/build.sh
 
-      - name: Configure local.properties
+      - name: Prepare .so zip
         run: |
-          echo "ndk.dir=$ANDROID_SDK_ROOT/ndk/$NDK_VERSION" > ndk/local.properties
-          echo "sdk.dir=$ANDROID_SDK_ROOT" >> ndk/local.properties
+          mkdir -p dist
+          cp -r lib/android dist/
+          cd dist
+          zip -r native-libs.zip android
+          mv native-libs.zip ../
 
-      - name: Build Native .so files
-        run: |
-          cd ndk
-          gradle clean assembleDebug
-
-      - name: Force move .so files to lib/android folders
-        run: |
-          mkdir -p lib/android/armeabi-v7a
-          mkdir -p lib/android/arm64-v8a
-
-          find ndk/build/intermediates/cmake/debug/obj/armeabi-v7a -name "*.so" -exec cp {} lib/android/armeabi-v7a/ \;
-          find ndk/build/intermediates/cmake/debug/obj/arm64-v8a -name "*.so" -exec cp {} lib/android/arm64-v8a/ \;
-
-      - name: Upload artifacts (optional)
+      - name: Upload .so artifact
         uses: actions/upload-artifact@v4
         with:
-          name: discord_rpc_so_files
-          path: lib/android/
+          name: native-libs
+          path: native-libs.zip
